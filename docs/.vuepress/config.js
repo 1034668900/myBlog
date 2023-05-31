@@ -63,6 +63,11 @@ export default defineUserConfig({
                     text: "购物商城微信小程序",
                     link: "https://gitee.com/Feng_Ch/uni-shop.git",
                     activeMatch: "https://gitee.com/Feng_Ch/uni-shop.git"
+                },
+                {
+                    text: "购物商城前台项目",
+                    link: "https://github.com/1034668900/shopping-mall-project.git",
+                    activeMatch: "https://github.com/1034668900/shopping-mall-project.git"
                 }
                 ]
 

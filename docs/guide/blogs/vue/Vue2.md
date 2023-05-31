@@ -562,6 +562,43 @@ new Vue({
 
 - 使用插件：```Vue.use(插件名)```
 
+### 自定义插件
+
+Vue.js 的插件应该暴露一个 `install` 方法。这个方法的第一个参数是 `Vue` 构造器，第二个参数是一个可选的选项对象：
+
+```js
+MyPlugin.install = function (Vue, options) {
+  // 1. 添加全局方法或 property
+  Vue.myGlobalMethod = function () {
+    // 逻辑...
+  }
+
+  // 2. 添加全局资源
+  Vue.directive('my-directive', {
+    bind (el, binding, vnode, oldVnode) {
+      // 逻辑...
+    }
+    ...
+  })
+
+  // 3. 注入组件选项
+  Vue.mixin({
+    created: function () {
+      // 逻辑...
+    }
+    ...
+  })
+
+  // 4. 添加实例方法
+  Vue.prototype.$myMethod = function (methodOptions) {
+    // 逻辑...
+  }
+}
+
+```
+
+
+
 ## scoped样式
 - 作用：让样式在局部生效，防止命名冲突导致的样式覆盖，减少污染样式命名空间
 ``` <style scoped>```
@@ -1289,7 +1326,7 @@ routes:[
 	            title:xxx
 	        }
 	})
-	​
+	
 	this.$router.replace({
 	    name:'xiangqing',
 	        params:{
@@ -1415,12 +1452,16 @@ const UserDetails = {
 
 ### 路由的两种工作模式
 1. 工作模式：**history**模式和**hash**模式
+
 2. 对于一个 url 来说，什么是 hash 值？—— # 及其后面的内容就是 hash 值。
+
 3. hash 值不会包含在 HTTP 请求中，即：hash 值不会带给服务器。
+
 4. hash 模式：
 	1. **地址中永远带着 # 号**，不美观 。
 	2. 若以后将地址通过第三方手机 app 分享，若 app 校验严格，则地址会被标记为不合法。
 	3. 兼容性较好。
+	
 5. history 模式：
 	1. 地址干净，美观 。
 	2. 兼容性和 hash 模式相比略差。
@@ -1429,7 +1470,141 @@ const UserDetails = {
 
 	
 	
-	
+
+### 路由懒加载
+
+当打包构建应用时，JavaScript 包会变得非常大，影响页面加载。如果我们能把不同路由对应的组件分割成不同的代码块，然后**当路由被访问的时候才加载对应组件**，这样就会更加高效。(因此后续路由都用**路由懒加载**)
+
+Vue Router 支持开箱即用的[动态导入](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports)，这意味着你可以用动态导入代替静态导入：
+
+```js
+// 将
+// import UserDetails from './views/UserDetails.vue'
+// 替换成
+const UserDetails = () => import('./views/UserDetails.vue')
+
+const router = createRouter({
+  // ...
+  routes: [{ path: '/users/:id', component: UserDetails }],
+})
+```
+
+`component` (和 `components`) 配置接收一个返回 Promise 组件的函数，Vue Router **只会在第一次进入页面时才会获取这个函数**，然后使用缓存数据。这意味着你也可以使用更复杂的函数，只要它们返回一个 Promise ：
+
+```js
+const UserDetails = () =>
+  Promise.resolve({
+    /* 组件定义 */
+  })
+```
+
+一般来说，对所有的路由**都使用动态导入**是个好主意。(**不要**在路由中使用[异步组件](https://v3.vuejs.org/guide/component-dynamic-async.html#async-components)。异步组件仍然可以在路由组件中使用，但路由组件本身就是动态导入的。)
+
+如果你使用的是 webpack 之类的打包器，它将自动从[代码分割](https://webpack.js.org/guides/code-splitting/)中受益。
+
+如果你使用的是 Babel，你将需要添加 [syntax-dynamic-import](https://babeljs.io/docs/plugins/syntax-dynamic-import/) 插件，才能使 Babel 正确地解析语法。
+
+
+
+## 图片懒加载
+
+### 图片懒插件插件
+
+库：vue-lazyload
+
+
+
+## 表单验证
+
+### 表单验证插件配置
+
+```js
+// VeeValidate插件表单验证区域
+
+import Vue from 'vue'
+
+import VeeValidate from 'vee-validate'
+
+// 引入中文
+
+import zh_CN from 'vee-validate/dist/locale/zh_CN'
+
+Vue.use(VeeValidate)
+
+
+// 表单验证
+VeeValidate.Validator.localize('zh_CN',{
+
+  messages:{
+
+    ...zh_CN.messages,
+
+    is: (failed) => `${failed}必须与密码相同` // 修改内置规则的message
+
+  },
+  attributes:{
+      // 将每个提示字段转换成中文
+    phone: '手机号',
+    code: '验证码',
+    password: '密码',
+    password: '确认密码',
+    agree: '协议'
+
+  }
+})
+
+// 自定义校验规则
+VeeValidate.Validator.extend('agree',{
+    validate: value => {
+        return value
+    },
+    getMessage: failed => failed + '必须同意'
+})
+```
+
+### 表单验证插件的使用
+
+```html
+ <label>手机号:</label>
+
+  <input v-model="phone"
+
+  placeholder="请输入你的手机号"
+
+  name="phone"
+
+  v-validate="{required:true , regex: /^1\d{10}$/}"
+
+  :class="{invalid: errors.has('phone')}"
+
+   />
+
+  <span class="error-msg">{{errors.first('phone')}}</span>
+
+
+
+  <!-- 确认密码的校验有点区别 -->
+
+  v-validate="{required:true, is:password}"
+```
+
+### 在所有的表单验证都通过后再允许注册
+
+```js
+  // 等待所有的表单验证成功，返回布尔值
+  const success = await this.$validator.validateAll();
+  if(success){
+      ...
+  }
+```
+
+## 
+
+
+
+
+
+
 
 
 
