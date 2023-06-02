@@ -78,9 +78,26 @@ export default defineUserConfig({
                 {
                     text: "Vue2",
                     link: "/guide/blogs/vue/Vue2.md",
-                    activeMatch: "/guide/vue/vue/Vue2.md"
+                    activeMatch: "/guide/blogs/vue/Vue2.md"
 
                 }
+            
+                ]
+            },
+            {
+                text: "Tools",
+                children: [
+                {
+                    text: "webpack",
+                    link: "/guide/blogs/tools/webpack.md",
+                    activeMatch: "/guide/tools/tools/webpack.md"
+
+                },
+                {
+                    text: 'git',
+                    link: "/guide/blogs/tools/git基础知识.md",
+                    activeMatch: '/guide/blogs/tools/git基础知识.md'
+                },
             
                 ]
             },
@@ -101,11 +118,6 @@ export default defineUserConfig({
             {
                 text: "MyBlogs",
                 children: [
-                    {
-                        text: 'git基础知识',
-                        link: "/guide/blogs/myblogs/git基础知识.md",
-                        activeMatch: '/guide/blogs/myblogs/git基础知识.md'
-                    },
                     {
                         text: 'pinia-store简介',
                         link: "/guide/blogs/myblogs/pinia-store简介.md",
