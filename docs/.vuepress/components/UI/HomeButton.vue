@@ -1,5 +1,5 @@
 <template>
-    <a class="btn" href="/guide/README.md" style="text-decoration: none;">开始访问</a>
+    <a class="btn" href="/" style="text-decoration: none;">开始访问</a>
 </template>
 <style scoped>
 .btn{

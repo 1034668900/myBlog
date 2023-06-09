@@ -80,6 +80,12 @@ export default defineUserConfig({
                     link: "/guide/blogs/vue/Vue2.md",
                     activeMatch: "/guide/blogs/vue/Vue2.md"
 
+                },
+                {
+                    text: "Vue3",
+                    link: "/guide/blogs/vue/Vue3.md",
+                    activeMatch: "/guide/blogs/vue/Vue3.md"
+
                 }
             
                 ]
@@ -109,9 +115,9 @@ export default defineUserConfig({
                     activeMatch: "/guide/blogs/browser/事件循环.md"
                 },
                 {
-                    text: '浏览器解析url过程',
-                    link: "/guide/blogs/browser/浏览器解析url过程.md",
-                    activeMatch: '/guide/blogs/browser/浏览器解析url过程.md'
+                    text: '计算机网络',
+                    link: "/guide/blogs/browser/计算机网络.md",
+                    activeMatch: '/guide/blogs/browser/计算机网络.md'
                 },
                 ]
             },

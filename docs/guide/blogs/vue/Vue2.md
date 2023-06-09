@@ -523,15 +523,15 @@ new Vue({
             }
         }
 ```
-- **注意事项**：props是只读的，Vue底层会监测你对props的修改，如果进行了修改，就会发出警告，若业务需求确实需要修改，那么请复制props的内容到data中一份，然后去修改data中的数据
+- **注意事项**：
+  1. props是只读的，Vue底层会监测你对props的修改，如果进行了修改，就会发出警告，若业务需求确实需要修改，那么请复制props的内容到data中一份，然后去修改data中的数据
+  2. 父组件传递的属性，子组件即使不用`props`声明接收也能在组件实例对象身上的`$attrs`上找到，但是子组件一旦声明接收后组件实例对象身上的`$attrs`上就没有了
 
 ## mixin(混合、混入)
-- 功能：可以把多个
-- 组件共用的配置提取成一个混入对象
-	- 如果内部数据和外部数据冲突
-		1. 声明周期钩子内部和外部的都要，且外部的先执行
-		2. 其它的如果内部有则混入的失效，没有则整合
-
+- 功能：可以把多个组件共用的配置提取成一个混入对象
+  - 如果内部数据和外部数据冲突
+  	1. 生命周期钩子内部和外部的都要，且外部的先执行
+  	2. 其它的如果内部有则混入的失效，没有则整合
 - 混合的使用
 	- 引入mixin.js
 	- 全局混入 ```Vue.mixin(xxx)```
@@ -810,25 +810,30 @@ module.exports = {
 
 ## 插槽
 1. **作用**：让父组件可以向子组件指定位置插入html结构，也是一种组件间通信的方式，适用于 父组件 ===> 子组件 
+
 2. **分类**：默认插槽、具名插槽、作用域插槽
-3. **使用方式**:
-	1. **默认插槽**
-	```js
-父组件中：
-        <Category>
-           <div>html结构1</div>
-        </Category>
-子组件中：
-        <template>
-            <div>
-               <!-- 定义插槽 -->
-               <slot>插槽默认内容...</slot>
-            </div>
-        </template>
-   ```
-```
-	2. **具名插槽**
-	```js
+
+3. **注意：**即使在子组件中没有声明`<slot></slot>`，父组件传入的内容也能在组件实例对象身上的`$slots`身上得到该内容
+
+4. **使用方式**:
+
+  1. **默认插槽**
+  ```html
+  父组件中：
+       <Category>
+          <div>html结构1</div>
+       </Category>
+  子组件中：
+       <template>
+           <div>
+              <!-- 定义插槽 -->
+              <slot>插槽默认内容...</slot>
+           </div>
+       </template>
+  ```
+    2. **具名插槽**
+```vue
+
 父组件中：
         <Category>
             <template slot="center">
@@ -848,49 +853,53 @@ module.exports = {
             </div>
         </template>
 ```
-	3. **作用域插槽**
-		1. **理解**：数据在组件的自身，但根据数据生成的结构需要组件的使用者来决定。（games数据在Category组件中，但使用数据所遍历出来的结构由App组件决定）
-		2. 具体实现
-	
-	```js
-	父组件中：
-	        <Category>
-	            <template scope="scopeData">//scopeData是一个对象
-	                <!-- 生成的是ul列表 -->
-	                <ul>
-	                    <li v-for="g in scopeData.games" :key="g">{{g}}</li>
-	                </ul>
-	            </template>
-	        </Category>
-	​
-	        <Category>
-	            <template slot-scope="scopeData">
-	                <!-- 生成的是h4标题 -->
-	                <h4 v-for="g in scopeData.games" :key="g">{{g}}</h4>
-	            </template>
-	        </Category>
-	子组件中：
-	        <template>
-	            <div>
-	                <slot :games="games"></slot>
-	            </div>
-	        </template>
-	        
-	        <script>
-	            export default {
-	                name:'Category',
-	                props:['title'],
-	                //数据在子组件自身
-	                data() {
-	                    return {
-	                        games:['红色警戒','穿越火线','劲舞团','超级玛丽']
-	                    }
-	                },
-	            }
-	        </script>
-	```
+
+
+3. **作用域插槽**
+	1. **理解**：数据在组件的自身，但根据数据生成的结构需要组件的使用者来决定。（games数据在Category组件中，但使用数据所遍历出来的结构由App组件决定）
+	2. 具体实现:
+```vue
+父组件中：
+        <Category>
+            <template scope="scopeData">//scopeData是一个对象
+                <!-- 生成的是ul列表 -->
+                <ul>
+                    <li v-for="g in scopeData.games" :key="g">{{g}}</li>
+                </ul>
+            </template>
+        </Category>
+
+        <Category>
+            <template slot-scope="scopeData">
+                <!-- 生成的是h4标题 -->
+                <h4 v-for="g in scopeData.games" :key="g">{{g}}</h4>
+            </template>
+        </Category>
+子组件中：
+        <template>
+            <div>
+                <slot :games="games"></slot>
+            </div>
+        </template>
+        
+        <script>
+            export default {
+                name:'Category',
+                props:['title'],
+                //数据在子组件自身
+                data() {
+                    return {
+                        games:['红色警戒','穿越火线','劲舞团','超级玛丽']
+                    }
+                },
+            }
+        </script>
+```
+
+
 
 ## Vuex
+
 ### Vuex基本属性
 1. **概念**
 	在Vue中实现集中式状态（数据）管理的一个Vue插件，对vue应用中多个组件的共享状态进行集中式的管理（读/写），也是一种组件间通信的方式，且适用于任意组件间通信
