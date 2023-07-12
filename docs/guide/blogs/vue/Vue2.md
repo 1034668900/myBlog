@@ -22,11 +22,11 @@
 	2. 使用场景 --> 用于绑定事件
 - **v-text**
 	1. **作用**：向其所在的节点中渲染文本内容
-	2. **与差值语法的区别**：v-text 会替换掉节点中的内容，{{xx}} 则不会
+	2. **与差值语法的区别**：v-text 会替换掉节点中的内容，`{{ xx }}` 则不会
 - **v-html**
 	1. **作用**：向指定节点中渲染包含 html 结构的内容
 	2. **与插值语法的区别**
-		1. v-html 会替换掉节点中所有的内容，{{xx}} 则不会
+		1. v-html 会替换掉节点中所有的内容，`{{ xx }} `则不会
 		2. v-html 可以识别 html 结构
 
 	3. **注意事项**
@@ -105,7 +105,7 @@ vm.$mount('#root') // 在实例对象vm上挂载目标容器
 	- **配置对象的属性**
 		1. value	设置属性默认值
 		2. writable	设置属性数否能够修改
-		3. enumerable	设置属性是否可，**枚举**(即是否可遍历)
+		3. enumerable	设置属性是否可**枚举**(即是否可遍历)
 		4. configurable	设置属性是否可删除或编辑
 		5. 在该函数内部可以书写**getter**和**setter**
 
@@ -200,7 +200,7 @@ vm.$mount('#root') // 在实例对象vm上挂载目标容器
 	1. 计算属性最终会出现在实例对象vm上，使用时可直接读取
 	2. 如果计算属性要被修改，那么必须写**set**函数去响应修改，且**set**中要引起计算属性所**依赖**的数据发生变换
 	3. 如果计算属性确定不考虑修改，则可以使用计算属性的简写形式
-	4. 再页面中可以使用插值语法```{{**计算属性名**}}```来显示计算结果
+	4. 再页面中可以使用插值语法```{{计算属性名}}```来显示计算结果
 - **计算属性的简写(不考虑修改才能简写)**
 
 ```js
@@ -253,8 +253,8 @@ vm.$mount('#root') // 在实例对象vm上挂载目标容器
 		2.  **对象写法**：使用于要绑定多个样式，个数不确定、名字也不确定
 		3.  **数组写法**：适用于要绑定多个样式、个数确定、名字也确定，但是不确定用不用
 - **style样式**
-	-  :style= '{样式属性: xxx}' 其中xxx是动态值
-	- :style = '[a, b]' 其中a、b是样式对象
+	-  `:style= '{样式属性: xxx}' `其中xxx是动态值
+	- `:style = '[a, b]'` 其中a、b是样式对象
 
 ## 条件渲染
 - **v-if**
@@ -297,7 +297,7 @@ vm.$mount('#root') // 在实例对象vm上挂载目标容器
 	1. Vue 会监视 **data 中所有层次**的数据
 	2. Vue是如何**监测对象**中的数据的？
 		- 通过 setter 实现监视，且要在 new Vue 时就传入要监测的数据
-		- 正常操作给对象中后追加的属性，Vue默认不会对齐做响应式处理
+		- 正常操作给对象中后追加的属性，Vue默认不会对其做响应式处理
 		- 如果需要给后添加的属性做响应式处理，可通过以下两个API实现：
 			- Vue.set(target，propertyName/index，value) 
 			- vm.$set(target，propertyName/index，value）
@@ -385,7 +385,7 @@ new Vue({
 
 - **组件**
 	- **理解**：用来实现局部(特定)功能效果的代码集合(html/css/js/image…..)
-	- **为什么使用组件？**一个界面的功能很复杂，根据各自的功能拆分为不同的组件，提高代码的复用，简化结构
+	- **为什么使用组件**：一个界面的功能很复杂，根据各自的功能拆分为不同的组件，提高代码的复用，简化结构
 	- **组件作用**：复用编码, 简化项目编码, 提高运行效率
 - **模块化**
 	- 当应用中的 js 都以模块来编写的, 那这个应用就是一个模块化的应用。（就是把一个js文件拆成多个）
@@ -697,7 +697,9 @@ new Vue({
 })
 ```
 - 使用全局事件总线
-	1. 接收数据：A组件想接收数据，则在A组件中给$bus绑定自定义事件，事件的回调留在自身。
+  1. 接收数据：A组件想接收数据，则在A组件中给$bus绑定自定义事件，事件的回调留在自身。
+  2. 提供数据：this.$bus.$emit('自定义事件名',数据)
+     - 最好在beforeDestroy钩子中，用$off去解绑当前组件所用到的事件
 
 ```js
 methods(){
@@ -712,9 +714,9 @@ beforeDestory( ){
 	this.$bus.$off('自定义事件名')
 }
 ```
-	2. 提供数据：```this.$bus.$emit('自定义事件名',数据)```
 
-- 最好在beforeDestroy钩子中，用$off去解绑当前组件所用到的事件
+
+
 
 ## 消息订阅与发布(pubsub)
 1. 一种组件间通信的方式，适用于任意组件间通信
@@ -722,6 +724,8 @@ beforeDestory( ){
 	1. 安装pubsub：```npm i pubsub-js```
 	2. 引入： ```import pubsub from 'pubsub-js' ```
 	3. 接收数据：A组件想接收数据，则在A组件中订阅消息，订阅的回调留在A组件自身
+	4. 提供数据：```pubsub.publish('xxx',数据)```
+	5. 最好在beforeDestroy钩子中，用```PubSub.unsubscribe(this.pid)```去取消订阅
 
 ```js
 methods(){
@@ -737,8 +741,7 @@ beforeDestory( ){
 	pubsub.unsubscribe(this.pid)
 }
 ```
-	4. 提供数据：```pubsub.publish('xxx',数据)```
-	5. 最好在beforeDestroy钩子中，用```PubSub.unsubscribe(this.pid)```去取消订阅
+
 
 ## nextTick
 - **语法**：```this.$nextTick(回调)```
@@ -817,7 +820,7 @@ module.exports = {
 
 4. **使用方式**:
 
-  1. **默认插槽**
+     1. **默认插槽**
   ```html
   父组件中：
        <Category>
@@ -831,7 +834,8 @@ module.exports = {
            </div>
        </template>
   ```
-    2. **具名插槽**
+​		2. **具名插槽**
+
 ```vue
 
 父组件中：
@@ -854,10 +858,10 @@ module.exports = {
         </template>
 ```
 
+ 	3. **作用域插槽**
+      	1. **理解**：数据在组件的自身，但根据数据生成的结构需要组件的使用者来决定。（games数据在Category组件中，但使用数据所遍历出来的结构由App组件决定）
+      	2. 具体实现:
 
-3. **作用域插槽**
-	1. **理解**：数据在组件的自身，但根据数据生成的结构需要组件的使用者来决定。（games数据在Category组件中，但使用数据所遍历出来的结构由App组件决定）
-	2. 具体实现:
 ```vue
 父组件中：
         <Category>
@@ -946,8 +950,8 @@ module.exports = {
 	```
 
 ###  Vuex基本使用
-1. $store在所有组件实例对象身上均可访问
-2. $store中核心配置项主要由Actions、Mutations、State组成，其中Actions主要用于处理逻辑等，Mutations可以直接操作State，只有经过Mutations操作State中的数据，开发者工具才监视得到数据变化
+1. $store在**所有组件实例对象**身上均可访问
+2. $store中核心配置项主要由**Actions**、**Mutations**、**State**组成，其中通过**dicpatch**派发**Actions**主要用于**处理逻辑**等，**Mutations可以直接操作State**，只有经过Mutations操作State中的数据，开发者工具才监视得到数据变化
 3. 组件操作数据时，如果没有网络请求或其它业务逻辑，可以越过Actions(即不通过dispatch向Actions请求)，而直接通过commit向Mutations发起请求。
 
 ###  Vuex原理图
@@ -981,7 +985,7 @@ module.exports = {
 
 #### mapGetters
 1. **mapGetters方法：** 用于帮助我们映射getters中的数据为计算属性
-2. 注意：**mapGetters映射方法**内部的对象写法只能为gitter属性取一个在当前组件内的别名
+2. 注意：**mapGetters映射方法**内部的对象写法只能为getter属性取一个在当前组件内的别名
 
 	```js
 		computed: {
@@ -1020,7 +1024,8 @@ module.exports = {
 	```
 	
 
-####总结
+#### 总结
+
 - mapActions与mapMutations使用时，若有传递参数的需要，最好在模板中绑定事件时就传递好参数，否则参数是事件对象
 
 ### Vuex模块化+命名空间
@@ -1123,11 +1128,11 @@ const router = new VueRouter({
 export default router
 ```
 4. 实现切换（active-class可配置高亮样式）
-```js
+```html
 <router-link active-class="active" to="/about">About</router-link>
 ```
 5. 指定展示位置
-```js
+```html
 <router-view></router-view>
 ```
 
@@ -1170,7 +1175,7 @@ routes:[
 ### 路由的query参数
 1. 传递参数
 
-	```js
+	```html
 	<!-- 跳转并携带query参数，to的字符串写法 -->
 	<router-link :to="/home/message/detail?id=666&title=你好">跳转</router-link>
 	<!--用模板字符串解析-->
@@ -1222,7 +1227,7 @@ routes:[
 	
 	```
 2. 传递参数
-	```js
+	```html
 	<!-- 跳转并携带params参数，to的字符串写法 -->
 	<router-link :to="/home/message/detail/666/你好">跳转</router-link>
 	<router-link :to="`/home/Message/detail/${m.id}/${m.title}`">{{ m.title}}</router-link>             
@@ -1234,25 +1239,23 @@ routes:[
            id:666,
             title:'你好'
         }
-    }"
+    }"></router-link>
    ```
-```
-
-3. 特别注意：路由携带params参数时，若使用to的对象写法，则不能使用path配置项，必须使用name配置！
+3. 特别注意：路由携带**params**参数时，若使用to的**对象写法**，则**不能使用path配置项**，**必须使用name配置！**
 
 4. 接收参数：
 
 	```js
 	$route.params.id
 	$route.params.title
-```
+	```
 
 
 
 ### 命名路由
 1. 作用：可以简化路由的跳转
 2. 使用实例：
-	```js
+	```html
 	1. 给路由命名：
 	
 	{
@@ -1351,7 +1354,7 @@ routes:[
 ### 缓存路由组件
 1. 作用：让不展示的路由组件保持挂载，不被销毁。
 2. 具体编码：
-```js
+```html
 //通过include指定被缓存的组件， News是组件名，不写include属性默认缓存keep-alive标签内所有组件
 <keep-alive  include="News">
 	<router-view></router-view>
@@ -1370,7 +1373,8 @@ routes:[
 2. 分类：全局守卫、独享守卫、组件内守卫
 
 #### 全局路由守卫
-1. 全局前置路由守卫--初始化时执行、每次路由切换前执行
+1. **全局前置**路由守卫--初始化时执行、每次路由**切换前**执行
+	
 	```js
 	
 	// 全局前置路由守卫——初始化的时候被调用、每次路由切换之前被调用
@@ -1388,7 +1392,8 @@ routes:[
 	  }
 	})
 	```
-2. 全局后置路由守卫--初始化时执行、每次路由切换后执行
+2. **全局后置**路由守卫--初始化时执行、每次路由**切换后**执行
+	
 	```js
 	
 	// 全局后置路由守卫——初始化的时候被调用、每次路由切换之后被调用
@@ -1606,8 +1611,6 @@ VeeValidate.Validator.extend('agree',{
       ...
   }
 ```
-
-## 
 
 
 

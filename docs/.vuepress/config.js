@@ -103,6 +103,11 @@ export default defineUserConfig({
             link: "/guide/blogs/vue/Vue3.md",
             activeMatch: "/guide/blogs/vue/Vue3.md",
           },
+          {
+            text: "Vue2数据响应式原理",
+            link: "/guide/blogs/vue/Vue2数据响应式原理.md",
+            activeMatch: "/guide/blogs/vue/Vue2数据响应式原理.md",
+          }
         ],
       },
       {
@@ -111,7 +116,7 @@ export default defineUserConfig({
           {
             text: "webpack",
             link: "/guide/blogs/tools/webpack.md",
-            activeMatch: "/guide/tools/tools/webpack.md",
+            activeMatch: "/guide/blogs/tools/webpack.md",
           },
           {
             text: "git",
@@ -119,6 +124,17 @@ export default defineUserConfig({
             activeMatch: "/guide/blogs/tools/git基础知识.md",
           },
         ],
+      },
+      {
+        text: "Problem",
+        children: [
+          {
+            text: "如何处理后端返回大量数据",
+            link: "/guide/blogs/problem/如何处理后端一次返回大量数据.md",
+            activeMatch: "/guide/blogs/problem/如何处理后端一次返回大量数据.md",
+          },
+        ]
+
       },
       {
         text: "Browser",
@@ -147,6 +163,21 @@ export default defineUserConfig({
             text: "计算机网络",
             link: "/guide/blogs/browser/计算机网络.md",
             activeMatch: "/guide/blogs/browser/计算机网络.md",
+          },
+          {
+            text: "网页渲染",
+            link: "/guide/blogs/browser/网页渲染.md",
+            activeMatch: "/guide/blogs/browser/网页渲染.md",
+          },
+          {
+            text: "响应式布局",
+            link: "/guide/blogs/browser/响应式布局.md",
+            activeMatch: "/guide/blogs/browser/响应式布局.md",
+          },
+          {
+            text: "Web Workers",
+            link: "/guide/blogs/browser/Web Workers.md",
+            activeMatch: "/guide/blogs/browser/Web Workers.md",
           },
         ],
       },

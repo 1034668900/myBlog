@@ -28,7 +28,7 @@
          3. 但是在setup配置项中**无法访问**`data、methods、computed...`等配置项内部的数据
       2. 如果`data、methods、computed...`等配置项内部的数据和setup配置项中的数据**有重名情况**，**以setup配置项为主**
       3. **setup**不能是一个**async**函数，因为**async函数**的**返回值不是一个对象**，而是一个**Promise**！！！(`后期也可以返回一个Promise实例，但是需要Suspense和异步引入`)
-      4. **总结：**Vue2的配置项别在Vue3中混用
+      4. **总结：** Vue2的配置项别在Vue3中混用
       5. Vue3中使用具名插槽时尽量使用`v-slot : 名字`的形式取名，这样在context上下文里的`slots`里接收到时才有名字，如果仍然使用vue2的`slot = "名字"`的形式，即使使用的是具名插槽，接收到的也还是`default`，看不到名字
    5. **setup的执行时机：**
       - 在`beforeCreate`**之前**执行**一次**，this是`undefined`
